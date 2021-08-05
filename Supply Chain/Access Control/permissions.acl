@@ -1,0 +1,11 @@
+// rule is prefix for defining the permission 
+rule Conditions {
+   description: "description of the rule"
+   participant(p): "org.supplychain.network.Manufacturer"
+   operation: CREATE, READ, UPDATE, DELETE, ALL 
+   resource(rsr): org.supplychain.network.Commodity // Rules that apply to 
+   transaction: org.supplychain.network.InitiatePO
+   condition: (rsr.owner.getIdentifier()==p.getIdentifier())
+   action: ALLOW, DENY
+}
+ // First Cum First Serve basis 

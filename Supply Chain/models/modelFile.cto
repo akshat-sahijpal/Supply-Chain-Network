@@ -1,0 +1,61 @@
+/* Assets and transactions 
+*/
+
+namespace org.supply.network
+
+/* 
+Asset uses asset keyword and a primary key  
+
+'o' provide this sign whenever we declare an attribute 
+*/
+asset assetName identified by primaryKey {
+  o String primaryKey /* Primary key can only be a String*/
+}
+
+asset Coffe extends assetName {
+  o String inheritanceDemoAttribute  
+}
+
+abstract asset CannotBeAAsset identified by assetKey {
+  o String assetKey
+}
+
+asset Cafe extends Coffe{
+  --> Coffe [] coffe /* --> represents a relation */
+}
+
+
+/*Participants */
+participant participantName identified by participantPrimaryKey {
+  o String participantPrimaryKey
+  o String name 
+  o String city 
+  o productType product
+}
+/*Enumerated type */
+enum productType {
+  o Car
+  o Train 
+  o Bullet
+}
+/* Concept are abstract classes that are not assets, participant: they are contained in them*/
+abstract concept Address {
+  o String city default="Chandigarh"
+  o String latitude 
+  o Double Latitude range=[12.2, 200.3]
+  o Integer longitude default=10
+  o Boolean truth default=true
+  o Integer timeline range=[2002,12200]
+  o productType vehical 
+}
+concept Local extends Address{
+  o String Locali
+}
+
+
+/*Transactions */
+transaction transactionName {
+  o String detail /*Atrributes */
+  o String changeProduct default="Car"
+  --> Coffe coffeProduct /* relation*/
+}

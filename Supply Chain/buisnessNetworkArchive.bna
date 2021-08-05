@@ -1,0 +1,39 @@
+// Buisness Network Archive File Creation Command 
+composer archive create -t dir -n . 
+
+
+// For Deleting stuff 
+composer card delete -c PeerAdminCard@fabric-network
+
+// Buisness Network card (Admit Card) is used to deploy bna on hyperledger fabric-> PeerAdmin@hlfvl  
+
+// Install  bna on top of hyperledger secondly start
+
+// install 
+composer network install --card PeerAdmin@hlfvl --archiveFile supplychgain-network@0.0.1.bna
+// Start the network 
+composer network start --networkName supplychain-network --networkVersion 0.0.1 --networkAdmin admin --networkAdminEnrollSecret <password> --card PeerAdminCard@hlfvl --file networkadmin.card
+
+
+// Now networkadmin.card is created 
+
+composer card import --file networkadmin.card
+
+// Check for successful deployment 
+composer network ping --card admin@suppychain-network
+
+// Generating REST API
+
+composer-rest-server 
+
+// Generating Front Application 
+yo hyperledger-composer:angular 
+
+
+/*
+channels keep transactions private from the broader network 
+whereas collections keep data private between subsets of organizations on the channel.
+
+*/
+
+/// 3000 default port for rest api , 4200 for angular 

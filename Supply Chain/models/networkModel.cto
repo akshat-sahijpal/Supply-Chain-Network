@@ -1,0 +1,90 @@
+namespace org.supplychain.network
+ 
+
+ concept Address{
+   o String cityName
+   o String locality optional
+   o Integer number range=[12, 24]
+ }
+ ///// All Partitcipants : All participants inherits from Trader 
+ abstract participant Trader {
+   o String companyName
+   o Address address
+ }
+participant Supplier identified by tradeId extends Trader {
+  o String tradeId // Always right the primary key inside the block when defined outside
+}
+participant Manufacturer identified by manufacturerId  extends Trader{
+  o String manufacturerId
+}
+ participant Distributor identified by distributorId  extends Trader{
+  o String distributorId
+}
+ participant Retailer identified by retailerId  extends Trader{
+  o String retailerId
+}
+ participant Customer identified by customerId  extends Trader{
+  o String customerId
+}
+ 
+
+ /*Assets : Traded by the Partitcipants */
+
+asset Commodity identified by commodityKey {
+  o String commodityKey
+  o String name 
+  o Integer quantity
+  o String description
+  o Double price 
+  o Double unitprice optional  
+  --> Trader owner optional // Relationship with the trader (who trades on the asset mustr have a relation)
+  --> Trader issuer optional
+  --> PurchaseOrder purchaseOrder optional
+  o Tracer[] trace 
+}
+asset PurchaseOrder identified by purchaseOrderKey {
+  o String purchaseOrderKey
+  o Commodity[] itemList  
+  o Double orderPrice optional
+  o OrderStatus orderStatus optional
+  --> Trader orderer 
+  --> Trader vendor
+}
+enum OrderStatus {
+  o Started
+  o Confirmed 
+  o done 
+  o cancelled 
+  o running 
+  o ongoing 
+}
+/* Tracking Time*/
+concept Tracer {
+  o String Tracer
+  o DateTime timestamp 
+  o Address location 
+  o Tracer[] trace
+  --> Trader currentCompanyTrading 
+}
+
+
+
+/////////// Transactions 
+
+transaction InitPurchaseOrder{
+  o String orderId
+  o Commodity[] items 
+  o String detailOfPartitcipant
+  --> Trader orderer optional
+  --> Trader vendor 
+  o OrderStatus status
+  o Double totalPrice optional
+}
+
+transaction TransferCommodity { // When Accomodation are tranfered from one participant to other
+  --> Commodity commodity
+  --> Trader newOwner 
+  --> Trader issuer
+  --> PurchaseOrder po
+  o Address shipperLocation
+}

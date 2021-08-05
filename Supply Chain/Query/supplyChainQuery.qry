@@ -1,0 +1,28 @@
+query getAllCommodities{
+  description: "SELECT all Commodities"
+  statement: "SELECT org.supplychain.network.Commodity"
+}
+query getAllPO{
+  description: "SELECT all PO"
+  statement: "SELECT org.supplychain.network.PurchaseOrder"
+}
+query getAllManufacturer{
+  description: "SELECT all Manufacturers"
+  statement: "SELECT org.supplychain.network.Manufacturer"
+}
+query getAllSuppliers{
+  description: "SELECT all Suppliers"
+  statement: "SELECT org.supplychain.network.Supplier"
+}
+query getAllDistributor{
+  description: "SELECT all Distributor"
+  statement: "SELECT org.supplychain.network.Distributor"
+}
+query getAllRetailers{
+  description: "SELECT all Retailers"
+  statement: "SELECT org.supplychain.network.Retailer"
+}
+query getAllCustomers{
+  description: "SELECT all Customers"
+  statement: "SELECT org.supplychain.network.Customers"
+}

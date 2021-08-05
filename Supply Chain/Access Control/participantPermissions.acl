@@ -1,0 +1,107 @@
+rule SystemRule{
+   description: "Provides All accesses"
+  participant(p): "org.hyperledger.composer.system.Participant"
+    operation: ALL
+  resource(rsr): "org.hyperledger.composer.system.**"
+  action: ALLOW
+}
+
+// Reading Access for participants 
+rule ReadCommodity {
+  description: "Reading Access for participants(only the owner has the rights)"
+  participant(p): "org.supplychain.network.*"// * means every participant has access 
+  operation: READ
+  resource(rsr): "org.supplychain.network.Commodity"
+  condition: (rsr.owner.getIdentifier() == p.getIdentifier())// only the owner has the reading rights 
+  action: ALLOW
+}
+// Vendor 
+rule VenderReadPurchaseOrder {
+  description: "All vendors can read their own purchase orders"
+  participant(p): "org.supplychain.network.*"// * means every participant has access 
+  operation: READ
+  resource(rsr): "org.supplychain.network.PurchaseOrder"
+  condition: (rsr.vendor.getIdentifier() == p.getIdentifier())// only the owner has the reading rights 
+  action: ALLOW
+}
+
+// Orderer PO 
+rule OrdererReadPurchaseOrder {
+  description: "All Orderers can read their own purchase orders"
+  participant(p): "org.supplychain.network.*"// * means every participant has access 
+  operation: READ
+  resource(rsr): "org.supplychain.network.PurchaseOrder"
+  condition: (rsr.orderer.getIdentifier() == p.getIdentifier())// only the owner has the reading rights 
+  action: ALLOW
+}
+// Access: All participants can tranfer Commodity 
+rule createTransferCommodityAccess {
+  description: "All participants can access (Create) transfer Commodity"
+  participant(p): "org.supplychain.network.*"// * means every participant has access 
+  operation: CREATE
+  resource(rsr): "org.supplychain.network.TransferCommodity"
+  action: ALLOW
+}
+
+rule TransferCommodityForOwner {
+  description: "All participants can transfer its own commodity "
+  participant(p): "org.supplychain.network.*"// * means every participant has access 
+  operation: UPDATE
+  resource(rsr): "org.supplychain.network.*"
+  transaction(tx): "org.supplychain.network.TransferCommodity"
+   condition: (rsr.owner.getIdentifier() == p.getIdentifier())// only the ownerhas 
+  action: ALLOW
+}
+
+
+rule ReadOwnTransactions {
+  description: "participants can only read their own transaction records"
+  participant(p): "org.supplychain.network.*"// * means every participant has access 
+  operation: READ
+  resource(rsr): "org.supplychain.network.TransferCommodity"
+  
+   condition: (rsr.issuer.getIdentifier() == p.getIdentifier())// only the ownerhas 
+  action: ALLOW
+}
+
+rule CreateOwnResource{
+  description: "All Participants can create it's own resource"
+   participant(p): "org.supplychain.network.*"// * means every participant has access 
+  operation: CREATE
+  resource(rsr): "org.supplychain.network.Commodity"
+   condition: (rsr.owner.getIdentifier() == p.getIdentifier())// only the ownerhas 
+  action: ALLOW
+}
+
+rule CreateOwnPO{
+  description: "All Participants can create it's own purchase order"
+   participant(p): "org.supplychain.network.*"// * means every participant has access 
+  operation: CREATE
+  resource(rsr): "org.supplychain.network.PurchaseOrder"
+   condition: (rsr.owner.getIdentifier() == p.getIdentifier())// only the ownerhas 
+  action: ALLOW
+}
+rule CreateInitPO{
+    description: "All Participants can init PO"
+   participant(p): "org.supplychain.network.*"// * means every participant has access 
+  operation: CREATE
+  resource(rsr): "org.supplychain.network.InitPo"
+   condition: (rsr.orderer.getIdentifier() == p.getIdentifier())// only the ownerhas 
+  action: ALLOW
+}
+rule VendorCanReadTransactions{
+      description: "All Vendprs can Read transactions"
+   participant(p): "org.supplychain.network.*"// * means every participant has access 
+  operation: READ
+  resource(rsr): "org.supplychain.network.InitPo"
+   condition: (rsr.vendor.getIdentifier() == p.getIdentifier())// only the ownerhas 
+  action: ALLOW
+}
+rule OrdererCanReadTransactions{
+      description: "All Orderers can Read transactions"
+   participant(p): "org.supplychain.network.*"// * means every participant has access 
+  operation: READ
+  resource(rsr): "org.supplychain.network.InitPo"
+   condition: (rsr.orderer.getIdentifier() == p.getIdentifier())// only the ownerhas 
+  action: ALLOW
+}
